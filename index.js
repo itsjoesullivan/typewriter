@@ -16,7 +16,6 @@ var Typewriter = function() {
 */
 Typewriter.prototype.add = function(key) {
 	if(this.recording) {
-		var startAt = ;		
 		this.queue.push({
 			start: new Date().getTime() - this.startTime,
 			key: key
@@ -29,14 +28,16 @@ Typewriter.prototype.add = function(key) {
 */
 Typewriter.prototype.record = function() {
 	this.recording = true;
-	this.queue = false;
+	this.queue = [];
 	this.startTime = new Date().getTime();
 };
 
 Typewriter.prototype.stop = function() {
 	if(this.recording) {
 			this.recording = false;
-	} else if(this.playing) {
+	}
+	if(this.playing) {
+		this.playing = false;
 		while(this.timeouts.length) {
 			clearTimeout(this.timeouts.pop());
 		}
@@ -45,15 +46,22 @@ Typewriter.prototype.stop = function() {
 /** Plays each of the events
 */
 Typewriter.prototype.play = function() {
+	if(this.recording) this.stop();
+	this.playing = true;
 	for(var i in this.queue) {
 		if(this.queue.hasOwnProperty(i)) {
-			var ev = this.queue[i];
-			this.timeouts.push(setTimeout(function() { this.fn(ev.key); }.bind(this),ev.start/this.speed)); 
+			this.timeouts.push(setTimeout(this.fn.bind(this,this.queue[i].key),this.queue[i].start/this.rate)); 
 		}
-
 	}
 
 };
+/*
+Typewriter.prototype.playOne = function(ev) {
+	this.timeouts.push(setTimeout(function() {
+		this.fn
+};*/
 
 /** No-op to be replaced */
 Typewriter.prototype.fn = function() {};
+
+module.exports = Typewriter;
