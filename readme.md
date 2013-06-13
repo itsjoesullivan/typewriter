@@ -1,10 +1,6 @@
 #Typewriter
 
-Typewriter writes type.
-
-##Why
-
-I wanted to be able to record myself typing easily, then play that elsewhere
+A simple way to record and play back events
 
 ##Usage
 
